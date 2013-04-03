@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" /> 
+		<title>WebSocket Test</title> 
+		<script language="javascript" type="text/javascript">
+			var wsUri = "ws://localhost:9000/watchCollection";
+			var output;
+			function init() {
+				output = document.getElementById("output"); testWebSocket();
+				document.getElementById("message").addEventListener("submit", function(evt) {
+					var rumuz = document.getElementById("rumuz")
+					var mesaj = document.getElementById("mesaj")
+					console.log(rumuz.value, mesaj.value)
+					websocket.send(JSON.stringify({rumuz: rumuz.value, mesaj: mesaj.value}))
+					evt.stopPropagation()
+					evt.preventDefault()
+				})
+			}
+			function testWebSocket() {
+				websocket = new WebSocket(wsUri);
+				websocket.onopen = function(evt) { onOpen(evt) };
+				websocket.onclose = function(evt) { onClose(evt) };
+				websocket.onmessage = function(evt) { onMessage(evt) };
+				websocket.onerror = function(evt) { onError(evt) };
+			}
+			function onOpen(evt) {
+				/*writeToScreen("CONNECTED");*/
+			}
+			function onClose(evt) { /*writeToScreen("DISCONNECTED");*/ }
+			function onMessage(evt) {
+				var jsondata = JSON.parse(evt.data)
+
+				writeToScreen('<span style="color: blue;">' + 
+				jsondata.rumuz + ': </span>' + jsondata.mesaj); }
+			function onError(evt) { writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data); }
+			function doSend(message) { writeToScreen("SENT: " + message);  websocket.send(message); }
+			function writeToScreen(message) { var pre = document.createElement("p"); pre.style.wordWrap = "break-word"; pre.innerHTML = message; output.insertBefore(pre, output.firstChild); }
+			window.addEventListener("load", init, false);
+		</script>
+		<style type="text/css">
+			label { display: block; width: 150px; }
+			input#submit { display: block; }
+			#message {float: left; }
+			#outputWrapper { float:left; margin-left: 30px; }
+		</style>
+	</head>
+	<body>
+		<form id="message">
+			<h2>Mesajınızı yazın:</h2>
+			<label for="rumuz">Rumuz</label><input id="rumuz" name="rumuz" type="text" placeholder="rumuz" />
+			<label for="mesaj">Mesaj</label><textarea id="mesaj" name="mesaj"></textarea>
+			<input id="submit" type="submit" />
+		</form>
+		<div id="outputWrapper">
+			<h2>Mesajlar:</h2>
+			<div id="output"></div>
+		</div>
+	</body>
+</html>
