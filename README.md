@@ -24,8 +24,8 @@ Uygulama Gereksinimleri
 
 Kurulum
 -------
-> `$git clone https://github.com/kubudi/oylg2013-demoApp.git`  
-> `$oylg2013-demoApp/`  
+> `git clone https://github.com/kubudi/oylg2013-demoApp.git`  
+> `oylg2013-demoApp/`  
 > `sbt`  
 > `run`  
 > `http://localhost:9000`  
